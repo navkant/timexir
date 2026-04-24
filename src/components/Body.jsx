@@ -5,10 +5,11 @@ import { Box, display } from "@mui/system";
 import { useEffect, useState, useRef } from "react";
 import Box from "@mui/material/Box";
 import Slider from "@mui/material/Slider";
-
-function valuetext(value) {
-  return `${value}°C`;
-}
+import TextField from "@mui/material/TextField";
+import IconButton from "@mui/material/IconButton";
+import AddIcon from "@mui/icons-material/Add";
+import MenuItem from "@mui/material/MenuItem";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
 
 const Body = () => {
   const audioUrl = new URL("../sound.mp3", import.meta.url);
@@ -18,10 +19,12 @@ const Body = () => {
   const [timerMinutes, setTimerMinutes] = useState(1);
   const [secondsCount, setSecondsCount] = useState(0);
   const [progress, setProgress] = useState(0);
+  const [taskList, setTaskList] = useState(["task1", "task2", "task3"]);
+  const [taskInput, setTaskInput] = useState("");
+  const [currentTask, setCurrentTask] = useState("");
   const intervalRef = useRef(null);
 
   useEffect(() => {
-    console.log("use effect called");
     if (isActive) {
       intervalRef.current = setInterval(() => {
         setSecondsCount((prev) => prev + 1);
@@ -41,6 +44,7 @@ const Body = () => {
       clearInterval(intervalRef.current);
       soundRef.current.play();
       setProgress(0);
+      setSecondsCount(0);
     }
   }, [secondsCount, timerMinutes]);
 
@@ -65,8 +69,15 @@ const Body = () => {
     setTimerMinutes(newValue);
   };
 
+  const handleAddTask = () => {
+    console.log("task add");
+  };
+
+  console.log(`task list: ${taskList}`);
+
   return (
     <Container
+      maxWidth={false}
       sx={{
         px: 2,
       }}
@@ -75,8 +86,7 @@ const Body = () => {
         sx={{
           display: "flex",
           justifyContent: "space-between",
-          bgcolor: "#8c1dce",
-          color: "white",
+          color: "#8c1dce",
         }}
       >
         <Box sx={{ px: 2 }}>
@@ -99,22 +109,43 @@ const Body = () => {
         </Box>
       </Box>
       <Box sx={{ display: "flex", justifyContent: "center" }}>
-        <Slider
-          onChange={handleSlider}
-          aria-label="Controlled slider"
-          defaultValue={25}
-          value={timerMinutes}
-          getAriaValueText={valuetext}
-          step={1}
-          marks
-          min={0}
-          max={45}
-          valueLabelDisplay="auto"
-          sx={{
-            width: "50%",
-            my: 4,
-          }}
-        />
+        <Box sx={{ display: "flex", width: "640px" }}>
+          <Slider
+            onChange={handleSlider}
+            aria-label="Controlled slider"
+            defaultValue={25}
+            value={timerMinutes}
+            step={1}
+            marks
+            min={0}
+            max={45}
+            valueLabelDisplay="auto"
+            sx={{
+              width: "75%",
+              my: 4,
+            }}
+          />
+        </Box>
+        <Box sx={{ margin: "16px" }}>
+          {" "}
+          <TextField
+            id="filled-basic"
+            label="Task"
+            variant="filled"
+            sx={{ my: "6px" }}
+            value={taskInput}
+            onChange={(event) => setTaskInput(event.target.value)}
+          />
+          <IconButton
+            aria-label="add"
+            color="primary"
+            onClick={() => {
+              setTaskList([...taskList, taskInput]);
+            }}
+          >
+            <AddIcon sx={{ fontSize: 48 }} />
+          </IconButton>
+        </Box>
       </Box>
       <Box
         sx={{
@@ -122,7 +153,7 @@ const Body = () => {
           display: "inline-flex",
           // margin: "128px",
           padding: "16px",
-          mx: 12,
+          mx: 20,
           justifyContent: "center",
           alignItems: "center",
         }}
@@ -150,6 +181,18 @@ const Body = () => {
             flexDirection: "column",
           }}
         >
+          <Select
+            sx={{ bgcolor: "cyan" }}
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={currentTask}
+            label="TASK"
+            onChange={(event) => setCurrentTask(event.target.value)}
+          >
+            {taskList.map((element) => {
+              return <MenuItem value={element}>{element}</MenuItem>;
+            })}
+          </Select>
           <Button onClick={handleClick} sx={{ bgcolor: "cyan", margin: "4px" }}>
             {isActive ? "Stop" : "Start"}
           </Button>
