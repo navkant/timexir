@@ -38,3 +38,5 @@ config.js
 .parcel-cache
 dist
 package-lock.json
+nextjs-dashboard/node_modules
+nextjs-dashboard/.next
