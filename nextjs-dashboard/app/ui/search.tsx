@@ -3,48 +3,34 @@
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
+import { useRef } from "react";
 
 export default function Search({ placeholder }: { placeholder: string }) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
 
-  function handleSearch(term: string) {
-    console.log("searching: ", term);
-
-    const params = new URLSearchParams(searchParams);
-    if (term) {
-      params.set("query", term);
-    } else {
-      params.delete("query");
-    }
-    replace(`${pathname}?${params.toString()}`);
-  }
-
-  const handleSearch1 = useDebouncedCallback((term) => {
-    console.log("Searching...", term);
-    const params = new URLSearchParams(searchParams);
-    console.log(term);
-    console.log(params);
-    if (term) {
-      params.set("query", term);
-    } else {
-      params.delete("query");
-    }
-    replace(`${pathname}?${params.toString()}`);
-  }, 3000);
-
-  const debounced = (func, timeout = 1500) => {
+  const debounced = (func, timeout = 1000) => {
     let timer;
-    console.log("debounced called", timer);
+
     return function (...args) {
-      console.log("inner function");
+      console.log(`args: ${args} timer: ${timer}`);
       clearTimeout(timer);
       timer = setTimeout(() => {
-        func.apply(this, args);
+        func(args);
       }, timeout);
     };
   };
+
+  const handleSearch2 = debounced((term) => {
+    const params = new URLSearchParams(searchParams);
+    if (term) {
+      params.set("query", term);
+    } else {
+      params.delete("query");
+    }
+    replace(`${pathname}?${params.toString()}`);
+  });
 
   return (
     <div className="relative flex flex-1 flex-shrink-0">
@@ -55,7 +41,7 @@ export default function Search({ placeholder }: { placeholder: string }) {
         className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
         placeholder={placeholder}
         onChange={(e) => {
-          debounced(handleSearch(e.target.value), 2000);
+          handleSearch2(e.target.value);
         }}
         defaultValue={searchParams.get("query")?.toString()}
       />
