@@ -1,7 +1,9 @@
+import Container from "@mui/material/Container";
+
 export default function Page() {
   return (
-    <div>
-      <h1>Timexir</h1>
-    </div>
+    <Container>
+      <h1>Timexir </h1>
+    </Container>
   );
 }

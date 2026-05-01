@@ -1,17 +1,10 @@
-import { GlobeAltIcon, ClockIcon } from "@heroicons/react/24/outline";
-import { lusitana } from "@/app/ui/fonts";
+import { ClockIcon } from "@heroicons/react/24/outline";
 
 export default function TimexirLogo() {
   return (
-    <div
-      className={`${lusitana.className} flex flex-col items-center      text-white`}
-    >
-      <div className="mx-20 bg-cyan-300">
-        <div className=" bg-pink-100 ">
-          <ClockIcon className="h-24 w-24 rotate-[0deg]" />
-        </div>
-      </div>
-      <p>Timexir</p>
+    <div className="flex flex-row items-center leading-none ">
+      <ClockIcon className="h-12 w-12 md:h-20 md:w-20" />
+      <p className="text-3xl">Timexir</p>
     </div>
   );
 }
