@@ -1,24 +1,77 @@
 "use client";
 
+import Button from "@mui/material/Button";
 import Slider from "@mui/material/Slider";
 import TextField from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";
+import CircularProgress from "@mui/material/CircularProgress";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
 import AddIcon from "@mui/icons-material/Add";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
 export default function Page() {
+  const audioUrl = new URL("./sound.mp3", import.meta.url);
+  const soundRef = useRef(new Audio(audioUrl));
+
+  const [isActive, setIsActive] = useState(false);
   const [timerMinutes, setTimerMinutes] = useState(1);
+  const [secondsCount, setSecondsCount] = useState(0);
+  const [progress, setProgress] = useState(0);
   const [taskInput, setTaskInput] = useState("");
   const [taskList, setTaskList] = useState(["task1", "task2", "task3"]);
+  const [currentTask, setCurrentTask] = useState("");
+  const intervalRef = useRef(null);
+
+  useEffect(() => {
+    if (isActive) {
+      intervalRef.current = setInterval(() => {
+        setSecondsCount((prev) => prev + 1);
+      }, 1000);
+    } else {
+      clearInterval(intervalRef.current);
+    }
+    return () => clearInterval(intervalRef.current);
+  }, [isActive]);
 
   const handleSlider = (_event: Event, newValue: number) => {
     setTimerMinutes(newValue);
   };
 
+  useEffect(() => {
+    const totalSeconds = timerMinutes * 60;
+    const newProgress =
+      totalSeconds > 0 ? (secondsCount / totalSeconds) * 100 : 0;
+    setProgress(newProgress);
+    if (totalSeconds === secondsCount && secondsCount !== 0) {
+      clearInterval(intervalRef.current);
+      soundRef.current.play();
+      setProgress(0);
+      setSecondsCount(0);
+    }
+  }, [secondsCount, timerMinutes]);
+
+  const handleClick = () => {
+    soundRef.current.pause();
+    soundRef.current.currentTime = 0;
+    if (isActive) {
+      setIsActive(false);
+    } else {
+      setIsActive(true);
+    }
+  };
+
+  const handleReset = () => {
+    soundRef.current.pause();
+    soundRef.current.currentTime = 0;
+    setIsActive(false);
+    setSecondsCount(0);
+  };
+
   return (
-    <div>
-      <div className="flex ">
-        <div className="bg-gray-200 w-3/4">
+    <div className="">
+      <div className="flex">
+        <div className=" w-3/4 flex items-center justify-center h-full py-1 mx-4">
           <Slider
             onChange={handleSlider}
             aria-label="Controlled slider"
@@ -32,7 +85,7 @@ export default function Page() {
             sx={{}}
           />
         </div>
-        <div className="flex bg-pink-300">
+        <div className="flex ">
           <TextField
             id="filled-basic"
             label="Task"
@@ -43,6 +96,8 @@ export default function Page() {
               "& .MuiInputBase-root": {
                 height: 40, // Sets the total height of the input area
               },
+              // border: 1,
+              borderRadius: 8,
             }}
             value={taskInput}
             onChange={(event) => setTaskInput(event.target.value)}
@@ -51,11 +106,72 @@ export default function Page() {
             aria-label="add"
             color="primary"
             onClick={() => {
+              console.log("clicked");
               setTaskList([...taskList, taskInput]);
+              setTaskInput("");
             }}
           >
             <AddIcon sx={{}} />
           </IconButton>
+        </div>
+      </div>
+      <div className="relative m-2 p-2  inline-flex justify-center items-center ">
+        <div className="flex items-center justify-center">
+          {/* Background Track */}
+          <CircularProgress
+            variant="determinate"
+            value={100}
+            size={690}
+            thickness={2}
+            sx={{ color: "#e0e0e0" }}
+          />
+          {/* Actual Progress */}
+          <CircularProgress
+            variant="determinate"
+            value={progress} // Current progress
+            size={690}
+            thickness={2}
+            sx={{ position: "absolute" }}
+          />
+        </div>
+        <div className="absolute flex-col flex  w-1/5 text-blue-600 ">
+          <Select
+            sx={{ bgcolor: "#E0F2FE", borderColor: "#2563eb" }}
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={currentTask}
+            label="TASK"
+            onChange={(event) => setCurrentTask(event.target.value)}
+          >
+            {taskList.map((element) => {
+              return <MenuItem value={element}>{element}</MenuItem>;
+            })}
+          </Select>
+          <Button
+            onClick={handleClick}
+            sx={{
+              border: 1,
+              margin: "4px",
+              color: "#2563eb",
+              bgcolor: "#E0F2FE",
+            }}
+          >
+            {isActive ? "Stop" : "Start"}
+          </Button>
+          <Button
+            onClick={handleReset}
+            sx={{
+              margin: "4px",
+              color: "#2563eb",
+              border: 1,
+              bgcolor: "#E0F2FE",
+            }}
+          >
+            Reset
+          </Button>
+          <div className="mx-2 px-6">
+            <h3>{timerMinutes} mins</h3>
+          </div>
         </div>
       </div>
     </div>
