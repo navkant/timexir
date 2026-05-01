@@ -4,8 +4,7 @@ import { useEffect } from "react";
 const Signin = () => {
   async function oAuthSignIN() {
     const OAUTH_ENDPOINT = "https://accounts.google.com/o/oauth2/v2/auth";
-    const CLIENT_ID =
-      "885602923697-ecpqclobua71m1pogtvc7p4qrplngj2f.apps.googleusercontent.com";
+    const CLIENT_ID = "";
     const REDIRECT_URI = "http://127.0.0.1:1234";
     const RESPONSE_TYPE = "token";
     const SCOPE =
