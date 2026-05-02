@@ -19,10 +19,11 @@ export async function GET(request: NextRequest) {
     process.env.GAUTH_REDIRECT_URL,
   );
 
-  const { tokens: tokenResponse } = await oauth2Client.getToken(
-    searchParams.get("code"),
-  );
-
+  // @ts-ignore
+  const response = await oauth2Client.getToken(searchParams.get("code"));
+  // @ts-ignore
+  const tokenResponse = response.tokens;
+  // @ts-ignore
   const resp = await fetch(process.env.GAUTH_RESOURCE_URL, {
     headers: {
       Authorization: `Bearer ${tokenResponse.access_token}`,

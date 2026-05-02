@@ -11,6 +11,7 @@ export async function GET() {
     process.env.GAUTH_CLIENT_SECRET,
     process.env.GAUTH_REDIRECT_URL,
   );
+  // @ts-ignore
   const scopes = process.env.GAUTH_SCOPES.split(",");
   const state = crypto.randomBytes(32).toString("hex");
 

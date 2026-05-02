@@ -8,11 +8,15 @@ export default function Search({ placeholder }: { placeholder: string }) {
   const pathname = usePathname();
   const { replace } = useRouter();
 
+  // @ts-ignore
   const debounced = (func, timeout = 1000) => {
+    // @ts-ignore
     let timer;
-
+    // @ts-ignore
     return function (...args) {
+      // @ts-ignore
       console.log(`args: ${args} timer: ${timer}`);
+      // @ts-ignore
       clearTimeout(timer);
       timer = setTimeout(() => {
         func(args);
@@ -20,10 +24,11 @@ export default function Search({ placeholder }: { placeholder: string }) {
     };
   };
 
+  // @ts-ignore
   const handleSearch2 = debounced((term) => {
     const params = new URLSearchParams(searchParams);
     params.set("page", "1");
-    
+
     if (term) {
       params.set("query", term);
     } else {

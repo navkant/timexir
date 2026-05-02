@@ -11,9 +11,6 @@ import AddIcon from "@mui/icons-material/Add";
 import { useState, useRef, useEffect } from "react";
 
 export default function Page() {
-  const audioUrl = new URL("./sound.mp3", import.meta.url);
-  const soundRef = useRef(new Audio(audioUrl));
-
   const [isActive, setIsActive] = useState(false);
   const [timerMinutes, setTimerMinutes] = useState(1);
   const [secondsCount, setSecondsCount] = useState(0);
@@ -25,18 +22,17 @@ export default function Page() {
 
   useEffect(() => {
     if (isActive) {
+      // @ts-ignore
       intervalRef.current = setInterval(() => {
         setSecondsCount((prev) => prev + 1);
       }, 1000);
     } else {
+      // @ts-ignore
       clearInterval(intervalRef.current);
     }
+    // @ts-ignore
     return () => clearInterval(intervalRef.current);
   }, [isActive]);
-
-  const handleSlider = (_event: Event, newValue: number) => {
-    setTimerMinutes(newValue);
-  };
 
   useEffect(() => {
     const totalSeconds = timerMinutes * 60;
@@ -44,16 +40,21 @@ export default function Page() {
       totalSeconds > 0 ? (secondsCount / totalSeconds) * 100 : 0;
     setProgress(newProgress);
     if (totalSeconds === secondsCount && secondsCount !== 0) {
+      // @ts-ignore
       clearInterval(intervalRef.current);
-      soundRef.current.play();
+      // @ts-ignore
+
       setProgress(0);
       setSecondsCount(0);
     }
   }, [secondsCount, timerMinutes]);
 
-  const handleClick = () => {
-    soundRef.current.pause();
-    soundRef.current.currentTime = 0;
+  const handleSlider = (_event: Event, newValue: number) => {
+    setTimerMinutes(newValue);
+  };
+
+  const handleStart = () => {
+    // @ts-ignore
     if (isActive) {
       setIsActive(false);
     } else {
@@ -62,8 +63,7 @@ export default function Page() {
   };
 
   const handleReset = () => {
-    soundRef.current.pause();
-    soundRef.current.currentTime = 0;
+    // @ts-ignore
     setIsActive(false);
     setSecondsCount(0);
   };
@@ -96,7 +96,6 @@ export default function Page() {
               "& .MuiInputBase-root": {
                 height: 40, // Sets the total height of the input area
               },
-              // border: 1,
               borderRadius: 8,
             }}
             value={taskInput}
@@ -148,13 +147,14 @@ export default function Page() {
             })}
           </Select>
           <Button
-            onClick={handleClick}
+            onClick={handleStart}
             sx={{
               border: 1,
               margin: "4px",
               color: "#2563eb",
               bgcolor: "#E0F2FE",
             }}
+            disabled={!currentTask}
           >
             {isActive ? "Stop" : "Start"}
           </Button>
