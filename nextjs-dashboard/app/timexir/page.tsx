@@ -9,6 +9,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import AddIcon from "@mui/icons-material/Add";
 import { useState, useRef, useEffect } from "react";
+import { useSound } from "react-sounds";
 
 export default function Page() {
   const [isActive, setIsActive] = useState(false);
@@ -19,6 +20,7 @@ export default function Page() {
   const [taskList, setTaskList] = useState(["task1", "task2", "task3"]);
   const [currentTask, setCurrentTask] = useState("");
   const intervalRef = useRef(null);
+  const { play, pause, stop } = useSound("notification/success");
 
   useEffect(() => {
     if (isActive) {
@@ -42,10 +44,10 @@ export default function Page() {
     if (totalSeconds === secondsCount && secondsCount !== 0) {
       // @ts-ignore
       clearInterval(intervalRef.current);
-      // @ts-ignore
-
+      play();
       setProgress(0);
       setSecondsCount(0);
+      setIsActive(false);
     }
   }, [secondsCount, timerMinutes]);
 
