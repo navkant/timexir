@@ -1,6 +1,8 @@
 import { google } from "googleapis";
 import { NextRequest, NextResponse } from "next/server";
+import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
+import { v4 as uuidv4 } from "uuid";
 
 export async function GET(request: NextRequest) {
   const cookieStore = await cookies();
@@ -13,6 +15,10 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ message: "User didnt approved" });
   }
 
+  if (stateFromAuthResponse !== stateFromRequest) {
+    return NextResponse.json({ message: "something went wrong" });
+  }
+
   const oauth2Client = new google.auth.OAuth2(
     process.env.GAUTH_CLIENT_ID,
     process.env.GAUTH_CLIENT_SECRET,
@@ -21,6 +27,7 @@ export async function GET(request: NextRequest) {
 
   // @ts-ignore
   const response = await oauth2Client.getToken(searchParams.get("code"));
+  console.log(`response: ${JSON.stringify(response)}`);
   // @ts-ignore
   const tokenResponse = response.tokens;
   // @ts-ignore
@@ -30,6 +37,7 @@ export async function GET(request: NextRequest) {
     },
   });
   const userInfo = await resp.json();
+  console.log(`userInfo: ${JSON.stringify(userInfo)}`);
 
-  return NextResponse.json(userInfo);
+  return redirect("/timexir");
 }

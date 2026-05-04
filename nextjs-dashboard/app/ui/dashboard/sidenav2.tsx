@@ -10,7 +10,7 @@ export default function SideNav2() {
         href="/timexir"
         className="mb-2 flex h-20 items-end justify-start md:h-40 p-4 bg-blue-600 rounded-md md:p-6"
       >
-        <div className="w-32 text-white md:w-40  ">
+        <div className="w-32  md:w-40  ">
           <TimexirLogo />
         </div>
       </Link>

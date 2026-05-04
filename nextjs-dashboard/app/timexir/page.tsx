@@ -51,6 +51,15 @@ export default function Page() {
     }
   }, [secondsCount, timerMinutes]);
 
+  // useEffect(() => {
+  //   readCookie("state").then((cookieData) => {
+  //     console.log("state: ", cookieData);
+  //     if (!cookieData) {
+  //       redirect("/");
+  //     }
+  //   });
+  // });
+
   const handleSlider = (_event: Event, newValue: number) => {
     setTimerMinutes(newValue);
   };
@@ -69,6 +78,10 @@ export default function Page() {
     setIsActive(false);
     setSecondsCount(0);
   };
+
+  // if (!session) {
+  //   redirect("/");
+  // }
 
   return (
     <div className="flex justify-center items-center">
