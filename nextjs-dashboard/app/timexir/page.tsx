@@ -10,6 +10,7 @@ import Select from "@mui/material/Select";
 import AddIcon from "@mui/icons-material/Add";
 import { useState, useRef, useEffect } from "react";
 import { useSound } from "react-sounds";
+import { useSession } from "next-auth/react";
 
 export default function Page() {
   const [isActive, setIsActive] = useState(false);
@@ -21,6 +22,7 @@ export default function Page() {
   const [currentTask, setCurrentTask] = useState("");
   const intervalRef = useRef(null);
   const { play, pause, stop } = useSound("notification/success");
+  const { data: session, status } = useSession();
 
   useEffect(() => {
     if (isActive) {
@@ -50,15 +52,6 @@ export default function Page() {
       setIsActive(false);
     }
   }, [secondsCount, timerMinutes]);
-
-  // useEffect(() => {
-  //   readCookie("state").then((cookieData) => {
-  //     console.log("state: ", cookieData);
-  //     if (!cookieData) {
-  //       redirect("/");
-  //     }
-  //   });
-  // });
 
   const handleSlider = (_event: Event, newValue: number) => {
     setTimerMinutes(newValue);
@@ -187,6 +180,7 @@ export default function Page() {
             </Button>
             <div className="mx-2 px-6">
               <h3>{timerMinutes} mins</h3>
+              <h4>{session?.user?.name}</h4>
             </div>
           </div>
         </div>
