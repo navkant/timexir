@@ -10,8 +10,8 @@ const handler = NextAuth({
   },
   providers: [
     GoogleProvider({
-      clientId: process.env.GAUTH_CLIENT_ID,
-      clientSecret: process.env.GAUTH_CLIENT_SECRET,
+      clientId: process.env.GAUTH_CLIENT_ID ?? "",
+      clientSecret: process.env.GAUTH_CLIENT_SECRET ?? "",
       authorization: {
         params: {
           prompt: "consent",
@@ -31,6 +31,7 @@ const handler = NextAuth({
       if (!user[0]) {
         console.log(`user doesnt exists, create now`);
         const newUser =
+          // @ts-ignore
           await sql`INSERT INTO users (name, email, password) VALUES
         (${profile.name}, ${profile.email}, ${"11111112121212121"})`;
       }

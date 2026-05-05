@@ -3,7 +3,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import postgres from "postgres";
-import jwt from "jsonwebtoken";
 import { v4 as uuidv4 } from "uuid";
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: "require" });
@@ -42,14 +41,14 @@ export async function GET(request: NextRequest) {
     },
   });
   const userInfo = await resp.json();
-  console.log(`userInfo: ${JSON.stringify(userInfo)}`);
-  const jwt_token = jwt.sign(userInfo, process.env.AUTH_SECRET);
-  const session_id = uuidv4();
+  // console.log(`userInfo: ${JSON.stringify(userInfo)}`);
+  // // const jwt_token = jwt.sign(userInfo, process.env.AUTH_SECRET);
+  // const session_id = uuidv4();
 
-  await sql`INSERT INTO users (email, name, password, access_token, session_id, jwt) VALUES
-  (${userInfo.email}, ${userInfo.name}, 'cnruvnrvnrivjnrri', ${tokenResponse.access_token}, ${session_id}, ${jwt_token})`;
+  // await sql`INSERT INTO users (email, name, password, access_token, session_id, jwt) VALUES
+  // (${userInfo.email}, ${userInfo.name}, 'cnruvnrvnrivjnrri', ${tokenResponse.access_token}, ${session_id}, ${jwt_token})`;
 
-  cookieStore.set("session_id", session_id, { httpOnly: true });
+  // cookieStore.set("session_id", session_id, { httpOnly: true });
 
   return redirect("/timexir");
 }
