@@ -5,6 +5,7 @@ export async function middleware(request: NextRequest) {
   // Example: Redirect if not logged in
   const sessionData = request.cookies.get("next-auth.session-token");
   if (!sessionData && request.nextUrl.pathname.startsWith("/timexir")) {
+    console.log("session data not found");
     return NextResponse.redirect(new URL("/api/auth/signin", request.url));
   }
 
