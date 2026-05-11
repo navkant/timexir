@@ -41,6 +41,10 @@ const handler = NextAuth({
     async redirect({ url, baseUrl }) {
       return `${baseUrl}/timexir`;
     },
+    async session({ session, token }) {
+      console.log("Session:", session);
+      return session;
+    },
   },
 });
 
