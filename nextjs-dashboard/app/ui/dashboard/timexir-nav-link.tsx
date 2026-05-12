@@ -8,18 +8,22 @@ import {
 import clsx from "clsx";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
-const links = [
-  { name: "Home", href: "/timexir", icon: HomeIcon },
-  {
-    name: "Stats",
-    href: "/timexir/stats",
-    icon: ChartBarSquareIcon,
-  },
-  { name: "User", href: "/timexir/user", icon: UserIcon },
-];
+import { useSession } from "next-auth/react";
 
 export default function TimexirNavLinks() {
+  const { data: session, status } = useSession();
+  const userName = session?.user?.name?.split(" ")[0];
+
+  const links = [
+    { name: "Home", href: "/timexir", icon: HomeIcon },
+    {
+      name: "Stats",
+      href: "/timexir/stats",
+      icon: ChartBarSquareIcon,
+    },
+    { name: userName, href: "/timexir/user", icon: UserIcon },
+  ];
+
   const pathname = usePathname();
   return (
     <>

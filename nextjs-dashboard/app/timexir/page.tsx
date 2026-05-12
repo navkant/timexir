@@ -10,7 +10,6 @@ import Select from "@mui/material/Select";
 import AddIcon from "@mui/icons-material/Add";
 import { useState, useRef, useEffect } from "react";
 import { useSound } from "react-sounds";
-import { useSession } from "next-auth/react";
 
 export default function Page() {
   const [isActive, setIsActive] = useState(false);
@@ -22,7 +21,6 @@ export default function Page() {
   const [currentTask, setCurrentTask] = useState("");
   const intervalRef = useRef(null);
   const { play, pause, stop } = useSound("notification/success");
-  const { data: session, status } = useSession();
 
   useEffect(() => {
     if (isActive) {
@@ -72,10 +70,6 @@ export default function Page() {
     setSecondsCount(0);
   };
 
-  // if (!session) {
-  //   redirect("/");
-  // }
-
   return (
     <div className="flex justify-center items-center">
       <div className="">
@@ -114,7 +108,6 @@ export default function Page() {
               aria-label="add"
               color="primary"
               onClick={() => {
-                console.log("clicked");
                 setTaskList([...taskList, taskInput]);
                 setTaskInput("");
               }}
@@ -180,7 +173,6 @@ export default function Page() {
             </Button>
             <div className="mx-2 px-6">
               <h3>{timerMinutes} mins</h3>
-              <h4>{session?.user?.name}</h4>
             </div>
           </div>
         </div>

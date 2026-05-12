@@ -14,7 +14,6 @@ const Signin = () => {
     const response = await fetch(
       `${OAUTH_ENDPOINT}?scope=${SCOPE}&include_granted_scopes=true&response_type=${RESPONSE_TYPE}&state=${STATE}&redirect_uri=${REDIRECT_URI}&client_id=${CLIENT_ID}`,
     );
-    console.log("resp: ", response);
   }
 
   /*

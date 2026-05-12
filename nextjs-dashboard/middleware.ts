@@ -1,18 +1,19 @@
-// middleware.ts
 import { NextResponse, NextRequest } from "next/server";
 
 export async function middleware(request: NextRequest) {
-  // Example: Redirect if not logged in
-  const sessionData = request.cookies.get("__Secure-next-auth.session-token");
+  const cookieName =
+    process.env.RUNNING_ENV === "prod"
+      ? "__Secure-next-auth.session-token"
+      : "next-auth.session-token";
+
+  const sessionData = request.cookies.get(cookieName);
+
   if (!sessionData && request.nextUrl.pathname.startsWith("/timexir")) {
-    console.log("session data not found");
+    console.log("Unauthenticatd request.. redirecting");
     return NextResponse.redirect(new URL("/api/auth/signin", request.url));
   }
-
-  // console.log(`decoded Data: ${JSON.stringify(sessionData)}`);
 }
 
-// Config to specify which routes should trigger this middleware
 export const config = {
   matcher: "/:path*",
 };

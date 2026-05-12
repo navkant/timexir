@@ -15,8 +15,6 @@ export default function Search({ placeholder }: { placeholder: string }) {
     // @ts-ignore
     return function (...args) {
       // @ts-ignore
-      console.log(`args: ${args} timer: ${timer}`);
-      // @ts-ignore
       clearTimeout(timer);
       timer = setTimeout(() => {
         func(args);

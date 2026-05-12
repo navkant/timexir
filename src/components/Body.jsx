@@ -73,8 +73,6 @@ const Body = () => {
     console.log("task add");
   };
 
-  console.log(`task list: ${taskList}`);
-
   return (
     <Container
       maxWidth={false}

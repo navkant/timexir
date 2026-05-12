@@ -7,9 +7,6 @@ const Redirect = () => {
   const hashParams = new URLSearchParams(urlHash);
 
   useEffect(() => {
-    console.log("state: ", hashParams.get("state"));
-    console.log("access-token", hashParams.get("access_token"));
-
     const getUserData = async () => {
       const resp = await fetch(
         "https://www.googleapis.com/oauth2/v2/userinfo",
@@ -20,7 +17,6 @@ const Redirect = () => {
         },
       );
       const userInfo = await resp.json();
-      console.log("user response", userInfo);
     };
 
     getUserData();

@@ -29,21 +29,17 @@ const handler = NextAuth({
 
       const user = await sql`SELECT * FROM users where email=${profile.email}`;
       if (!user[0]) {
-        console.log(`user doesnt exists, create now`);
+        console.log(`Creating a new user`);
         const newUser =
           // @ts-ignore
           await sql`INSERT INTO users (name, email, password) VALUES
         (${profile.name}, ${profile.email}, ${"11111112121212121"})`;
       }
-      console.log("user already exists..");
+
       return true;
     },
     async redirect({ url, baseUrl }) {
       return `${baseUrl}/timexir`;
-    },
-    async session({ session, token }) {
-      console.log("Session:", session);
-      return session;
     },
   },
 });

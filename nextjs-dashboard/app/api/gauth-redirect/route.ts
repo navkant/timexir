@@ -30,10 +30,10 @@ export async function GET(request: NextRequest) {
 
   // @ts-ignore
   const response = await oauth2Client.getToken(searchParams.get("code"));
-  // console.log(`response: ${JSON.stringify(response)}`);
+
   // @ts-ignore
   const tokenResponse = response.tokens;
-  console.log(tokenResponse);
+
   // @ts-ignore
   const resp = await fetch(process.env.GAUTH_RESOURCE_URL, {
     headers: {
@@ -41,8 +41,8 @@ export async function GET(request: NextRequest) {
     },
   });
   const userInfo = await resp.json();
-  // console.log(`userInfo: ${JSON.stringify(userInfo)}`);
-  // // const jwt_token = jwt.sign(userInfo, process.env.AUTH_SECRET);
+
+  // const jwt_token = jwt.sign(userInfo, process.env.AUTH_SECRET);
   // const session_id = uuidv4();
 
   // await sql`INSERT INTO users (email, name, password, access_token, session_id, jwt) VALUES
