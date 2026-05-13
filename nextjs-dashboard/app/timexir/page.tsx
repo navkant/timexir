@@ -10,6 +10,7 @@ import Select from "@mui/material/Select";
 import AddIcon from "@mui/icons-material/Add";
 import { useState, useRef, useEffect } from "react";
 import { useSound } from "react-sounds";
+import { useQuery } from "@tanstack/react-query";
 
 export default function Page() {
   const [isActive, setIsActive] = useState(false);
@@ -21,6 +22,21 @@ export default function Page() {
   const [currentTask, setCurrentTask] = useState("");
   const intervalRef = useRef(null);
   const { play, pause, stop } = useSound("notification/success");
+
+  const { data: userTasks, isLoading } = useQuery({
+    queryKey: ["my-data"],
+    queryFn: () => fetch("/api/user-task").then((res) => res.json()),
+  });
+
+  useEffect(() => {
+    if (!isLoading) {
+      setTaskList(
+        userTasks.map((element) => {
+          return element.task_name;
+        }),
+      );
+    }
+  }, [userTasks]);
 
   useEffect(() => {
     if (isActive) {
