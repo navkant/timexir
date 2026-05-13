@@ -31,6 +31,7 @@ export default function Page() {
   useEffect(() => {
     if (!isLoading) {
       setTaskList(
+        // @ts-ignore
         userTasks.map((element) => {
           return element.task_name;
         }),
